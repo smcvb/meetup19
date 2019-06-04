@@ -1,14 +1,18 @@
 package com.meetup.giftcard.query;
 
 import java.time.Instant;
+import java.util.List;
 
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventhandling.Timestamp;
+import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.stereotype.Component;
 
 import com.meetup.giftcard.coreapi.CardIssuedEvent;
 import com.meetup.giftcard.coreapi.CardRedeemedEvent;
 import com.meetup.giftcard.coreapi.CardSummary;
+import com.meetup.giftcard.coreapi.FindAllCardSummariesQuery;
+import com.meetup.giftcard.coreapi.FindCardSummaryQuery;
 
 @Component
 public class CardSummaryProjector {
@@ -30,5 +34,15 @@ public class CardSummaryProjector {
             cardSummary.setRemainingValue(cardSummary.getRemainingValue() - event.getAmount());
             cardSummary.setNumberOfTransactions(cardSummary.getNumberOfTransactions() + 1);
         });
+    }
+
+    @QueryHandler
+    public CardSummary handle(FindCardSummaryQuery query) {
+        return cardSummaryRepository.findById(query.getCardId()).orElse(null);
+    }
+
+    @QueryHandler
+    public List<CardSummary> handle(FindAllCardSummariesQuery query) {
+        return cardSummaryRepository.findAll();
     }
 }
