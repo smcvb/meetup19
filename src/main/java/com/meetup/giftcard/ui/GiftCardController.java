@@ -5,6 +5,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.axonframework.eventhandling.gateway.EventGateway;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.context.annotation.Profile;
@@ -17,16 +18,19 @@ import com.meetup.giftcard.coreapi.FindAllCardSummariesQuery;
 import com.meetup.giftcard.coreapi.FindCardSummaryQuery;
 import com.meetup.giftcard.coreapi.IssueCardCommand;
 import com.meetup.giftcard.coreapi.RedeemCardCommand;
+import com.meetup.order.coreapi.OrderPlacedEvent;
 
 @Profile("ui")
 @RestController
 public class GiftCardController {
 
     private final CommandGateway commandGateway;
+    private final EventGateway eventGateway;
     private final QueryGateway queryGateway;
 
-    public GiftCardController(CommandGateway commandGateway, QueryGateway queryGateway) {
+    public GiftCardController(CommandGateway commandGateway, EventGateway eventGateway, QueryGateway queryGateway) {
         this.commandGateway = commandGateway;
+        this.eventGateway = eventGateway;
         this.queryGateway = queryGateway;
     }
 
@@ -55,6 +59,12 @@ public class GiftCardController {
         commandGateway.sendAndWait(new IssueCardCommand(cardId, 250));
         commandGateway.sendAndWait(new RedeemCardCommand(cardId, "normal transaction", 50));
         commandGateway.sendAndWait(new RedeemCardCommand(cardId, "negative transaction", -10));
+    }
+
+    @GetMapping("/command/order/{amount}/from/{cardId}")
+    public void placeOrder(@PathVariable("amount") Integer amount, @PathVariable("cardId") String cardId) {
+        String orderId = UUID.randomUUID().toString();
+        eventGateway.publish(new OrderPlacedEvent(orderId, cardId, amount));
     }
 
     @GetMapping("/query/cardsummary/{cardId}")
