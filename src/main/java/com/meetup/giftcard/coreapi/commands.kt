@@ -1,12 +1,14 @@
 package com.meetup.giftcard.coreapi
 
+import org.axonframework.modelling.command.TargetAggregateIdentifier
+
 data class IssueCardCommand(
-    val cardId: String,
+    @TargetAggregateIdentifier val cardId: String,
     val amount: Int
 )
 
 data class RedeemCardCommand(
-    val cardId: String,
+    @TargetAggregateIdentifier val cardId: String,
     val transactionId: String,
     val amount: Int
 )
