@@ -7,6 +7,7 @@ import java.util.concurrent.CompletableFuture;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import com.meetup.giftcard.coreapi.FindCardSummaryQuery;
 import com.meetup.giftcard.coreapi.IssueCardCommand;
 import com.meetup.giftcard.coreapi.RedeemCardCommand;
 
+@Profile("ui")
 @RestController
 public class GiftCardController {
 

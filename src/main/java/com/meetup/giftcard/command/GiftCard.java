@@ -5,6 +5,7 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
+import org.springframework.context.annotation.Profile;
 
 import com.meetup.giftcard.coreapi.CannotRedeemNegativeAmountException;
 import com.meetup.giftcard.coreapi.CardIssuedEvent;
@@ -13,6 +14,7 @@ import com.meetup.giftcard.coreapi.IssueCardCommand;
 import com.meetup.giftcard.coreapi.NotEnoughFundsException;
 import com.meetup.giftcard.coreapi.RedeemCardCommand;
 
+@Profile("command")
 @Aggregate
 public class GiftCard {
 

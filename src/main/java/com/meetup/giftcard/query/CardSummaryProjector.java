@@ -6,6 +6,7 @@ import java.util.List;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventhandling.Timestamp;
 import org.axonframework.queryhandling.QueryHandler;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.meetup.giftcard.coreapi.CardIssuedEvent;
@@ -14,6 +15,7 @@ import com.meetup.giftcard.coreapi.CardSummary;
 import com.meetup.giftcard.coreapi.FindAllCardSummariesQuery;
 import com.meetup.giftcard.coreapi.FindCardSummaryQuery;
 
+@Profile("query")
 @Component
 public class CardSummaryProjector {
 
